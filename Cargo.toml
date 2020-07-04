@@ -1,0 +1,9 @@
+[package]
+name = "rut"
+version = "0.1.0"
+authors = ["Andrea Tupini <tupini07@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+regex = "1.3.9"
+clap = "3.0.0-beta.1"
