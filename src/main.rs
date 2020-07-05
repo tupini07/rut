@@ -9,11 +9,7 @@ use regex::Regex;
 use itertools::Itertools;
 use std::io::{self, BufRead};
 
-// from : https://stackoverflow.com/a/49734423/2234619
 fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: String) {
-    dbg!(&text);
-    dbg!(&field_statements);
-
     let sep_string = Box::new(join_string);
 
     let mut res = String::new();
@@ -44,7 +40,6 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
                 //open at close
                 let r = Regex::new(r"^(\d)\-$").unwrap();
                 let rep = r.replace_all(f, "$1");
-                dbg!(&rep);
                 let p = rep.parse::<usize>().unwrap();
 
                 res = format!(
@@ -81,8 +76,6 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
         }
     }
 
-    dbg!(&res);
-
     println!("{}", res);
 }
 
@@ -105,6 +98,8 @@ fn main() {
             println!("{}", re.replace_all(&line, provided_template.as_str()));
         }
     } else {
+        // TODO: refactor this and send text that is being read from stdin
+        // instead of using a static string
         let text = "some text -- that is -- separated".to_string();
         let text_vec: Vec<String>;
 
