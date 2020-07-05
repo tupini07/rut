@@ -1,5 +1,6 @@
 use clap::crate_version;
 use clap::Clap;
+use std::process;
 
 /// The cut clone with regex capabilities.
 #[derive(Clap)]
@@ -10,26 +11,49 @@ pub struct AppOptions {
     pub regex: Option<String>,
 
     /// String template that specifies how to use the capture group
-    #[clap(short, long)]
+    #[clap(short, long, allow_hyphen_values = true)]
     pub template: Option<String>,
 
     /// Delimiter on which to cut the string
-    #[clap(short, long)]
+    #[clap(short, long, allow_hyphen_values = true)]
     pub delimiter: Option<String>,
 
     /// Fields
-    #[clap(short, long)]
+    #[clap(short, long, allow_hyphen_values = true)]
     pub fields: Option<String>,
 
-    /// Characters
-    #[clap(short, long)]
-    pub character_range: Option<String>,
+    /// The string used to join fields, if provided
+    #[clap(short, long, allow_hyphen_values = true)]
+    pub join_string: Option<String>,
 
     /// Runs in debug mode
     #[clap(long)]
     pub debug: bool,
 }
 
+fn check_arguments(args: &AppOptions) {
+    if (args.regex.is_some() || args.template.is_some())
+        && (args.regex.is_none() || args.template.is_none())
+    {
+        println!(
+            "Arguments missing! When using values for the regex \
+             functionality both the 'template' and 'regex' arguments \
+             need to be provided"
+        );
+        process::exit(1);
+    }
+
+    if args.delimiter.is_some() && args.fields.is_none() {
+        println!(
+            "Arguments missing! When using values for 'fields' of 'delimiter' \
+                  you must provide both arguments"
+        );
+        process::exit(1);
+    }
+}
+
 pub fn parse_cli_arguments() -> AppOptions {
-    AppOptions::parse()
+    let args = AppOptions::parse();
+    check_arguments(&args);
+    args
 }
