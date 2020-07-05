@@ -43,12 +43,26 @@ fn check_arguments(args: &AppOptions) {
         process::exit(1);
     }
 
-    if args.delimiter.is_some() && args.fields.is_none() {
-        println!(
-            "Arguments missing! When using values for 'fields' of 'delimiter' \
+    if args.delimiter.is_some() {
+        if args.fields.is_none() {
+            println!(
+                "Arguments missing! When using values for 'fields' of 'delimiter' \
                   you must provide both arguments"
-        );
-        process::exit(1);
+            );
+            process::exit(1);
+        }
+
+        // now check that the fields are well formatted
+        let r = regex::Regex::new(r"^(\d?\-\d?,?)+$").unwrap();
+        if !r.is_match(args.fields.clone().unwrap().as_str()) {
+            println!(
+                "The provided field value is not formatted correctly \
+                      It should be composed of a 'comma separated' list where \
+                      each element is a range of the shape 'd-d' where either \
+                      the closing or opening limit can be optionally provided"
+            );
+            process::exit(1);
+        }
     }
 }
 
