@@ -16,7 +16,7 @@ Clone repo and install with cargo
 cargo install --path .
 ```
 
-### Regex for text replacement
+## Regex for text replacement
 
 ### Named capture groups
 
