@@ -14,43 +14,45 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
 
     let mut res = String::new();
 
+    let get_limits = |r: &str, l1: usize, l2: usize| {
+        let end = if l2 > 0 {
+            l2
+        } else {
+            text.iter().len()
+        };
+
+        format!(
+            "{}{}",
+            r,
+            text.iter()
+                .skip(l1)
+                .take(end)
+                .cloned()
+                .intersperse(sep_string.to_string())
+                .collect::<String>()
+        )
+    };
+
     for f in field_statements {
         if !res.is_empty() {
             res = format!("{}{}", res, sep_string);
         }
 
         if !f.contains("-") {
+            // then we're being requested a single field
             res.push_str(text.iter().nth(f.parse::<usize>().unwrap()).unwrap());
         } else {
             if f.starts_with("-") {
                 // open at start
                 let r = Regex::new(r"^\-(\d)$").unwrap();
                 let p = r.replace_all(f, "$1").parse::<usize>().unwrap();
-
-                res = format!(
-                    "{}{}",
-                    res,
-                    text.iter()
-                        .take(p)
-                        .cloned()
-                        .intersperse(sep_string.to_string())
-                        .collect::<String>()
-                )
+                res = get_limits(&res, 0, p);
             } else if f.ends_with("-") {
                 //open at close
                 let r = Regex::new(r"^(\d)\-$").unwrap();
                 let rep = r.replace_all(f, "$1");
                 let p = rep.parse::<usize>().unwrap();
-
-                res = format!(
-                    "{}{}",
-                    res,
-                    text.iter()
-                        .skip(p - 1)
-                        .cloned()
-                        .intersperse(sep_string.to_string())
-                        .collect::<String>()
-                )
+                res = get_limits(&res, p-1, 0);
             } else {
                 //specifies a range of both close and end
                 let r = Regex::new(r"^(\d)\-(\d)$").unwrap();
@@ -62,16 +64,7 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
 
                 let (l1, l2): (usize, usize) = (rep[0] - 1, rep[1]);
 
-                res = format!(
-                    "{}{}",
-                    res,
-                    text.iter()
-                        .skip(l1)
-                        .take(l2 - l1)
-                        .cloned()
-                        .intersperse(sep_string.to_string())
-                        .collect::<String>()
-                )
+                res = get_limits(&res, l1, l2 - l1);
             }
         }
     }
