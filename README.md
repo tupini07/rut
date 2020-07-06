@@ -2,13 +2,23 @@
 
 The _cut_ clone with regex capabilities.
 
-### Why not just use `sed` and `cut`?
+## Why not just use `sed` and `cut`?
 
 I like Rust's regex implementation and I've always wanted a `cut` implementation that accepts a multi-character _delimiter_.
 
+## Installing
+
+### Directly build and install repository
+
+Clone repo and install with cargo
+
+```bash
+cargo install --path .
+```
+
 ### Regex for text replacement
 
-#### Named capture groups
+### Named capture groups
 
 Use the [regex crate's named capture group](https://docs.rs/regex/1.3.9/regex/#example-replacement-with-named-capture-groups) syntax: `(?P<group name>group regex)`.
 
@@ -16,7 +26,7 @@ Use the [regex crate's named capture group](https://docs.rs/regex/1.3.9/regex/#e
 cat Cargo.toml | grep = | rut -r "(?P<key>.?*) = (?P<value>.?*)" -t "key: '{{key}}' - value: '{{value}}'"
 ```
 
-#### Positional capture groups
+### Positional capture groups
 
 Capture groups can also be referenced positionally (starting from _1_).
 

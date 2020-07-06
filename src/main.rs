@@ -15,18 +15,12 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
     let mut res = String::new();
 
     let get_limits = |r: &str, l1: usize, l2: usize| {
-        let end = if l2 > 0 {
-            l2
-        } else {
-            text.iter().len()
-        };
-
         format!(
             "{}{}",
             r,
             text.iter()
                 .skip(l1)
-                .take(end)
+                .take(if l2 > 0 { l2 } else { text.iter().len() })
                 .cloned()
                 .intersperse(sep_string.to_string())
                 .collect::<String>()
@@ -52,7 +46,7 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
                 let r = Regex::new(r"^(\d)\-$").unwrap();
                 let rep = r.replace_all(f, "$1");
                 let p = rep.parse::<usize>().unwrap();
-                res = get_limits(&res, p-1, 0);
+                res = get_limits(&res, p - 1, 0);
             } else {
                 //specifies a range of both close and end
                 let r = Regex::new(r"^(\d)\-(\d)$").unwrap();
