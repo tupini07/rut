@@ -9,9 +9,7 @@ use regex::Regex;
 use itertools::Itertools;
 use std::io::{self, BufRead};
 
-fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: String) {
-    let sep_string = Box::new(join_string);
-
+fn get_fields(text: Vec<String>, field_statements: &Vec<&str>, join_string: &String) {
     let mut res = String::new();
 
     let get_limits = |r: &str, l1: usize, l2: usize| {
@@ -22,19 +20,24 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
                 .skip(l1)
                 .take(if l2 > 0 { l2 } else { text.iter().len() })
                 .cloned()
-                .intersperse(sep_string.to_string())
+                .intersperse(join_string.to_string())
                 .collect::<String>()
         )
     };
 
     for f in field_statements {
         if !res.is_empty() {
-            res = format!("{}{}", res, sep_string);
+            res = format!("{}{}", res, join_string);
         }
 
         if !f.contains("-") {
             // then we're being requested a single field
-            res.push_str(text.iter().nth(f.parse::<usize>().unwrap()).unwrap());
+            let index = f.parse::<usize>().unwrap();
+            res.push_str(
+                text.iter()
+                    .nth(index - 1)
+                    .expect(&format!("The provided index '{}' is out of bounds", index)),
+            );
         } else {
             if f.starts_with("-") {
                 // open at start
@@ -69,6 +72,9 @@ fn get_fields(text: Vec<String>, field_statements: Vec<&str>, join_string: Strin
 fn main() {
     let arguments = cli::parse_cli_arguments();
 
+    let stdin = io::stdin();
+    let lines = stdin.lock().lines();
+
     if arguments.regex.is_some() {
         let provided_regex = arguments.regex.unwrap();
         let re = Regex::new(&provided_regex).unwrap();
@@ -79,32 +85,35 @@ fn main() {
             .replace("{{", "${")
             .replace("}}", "}");
 
-        let stdin = io::stdin();
-        for line in stdin.lock().lines() {
+        for line in lines {
             let line = line.expect("Could not read line from standard in");
             println!("{}", re.replace_all(&line, provided_template.as_str()));
         }
     } else {
-        // TODO: refactor this and send text that is being read from stdin
-        // instead of using a static string
-        let text = "some text -- that is -- separated".to_string();
-        let text_vec: Vec<String>;
+        let delimiter = arguments.delimiter.unwrap_or("".to_string());
 
-        // if we were provided a delimiter then split on it, else split on every character
-        if arguments.delimiter.is_some() {
-            text_vec = text
-                .as_str()
-                .split(&arguments.delimiter.unwrap())
-                .map(|e| e.to_string())
-                .collect();
-        } else {
-            text_vec = text.chars().map(|e| e.to_string()).collect();
+        let raw_fields = arguments.fields.unwrap();
+        let fields = raw_fields.as_str().split(",").collect::<Vec<&str>>();
+
+        let join_string = arguments.join_string.unwrap_or(String::new());
+
+        for line in lines {
+            let line = line.expect("Could not read line from standard in");
+
+            let text_vec: Vec<String>;
+
+            // if we were provided a delimiter then split on it, else split on every character
+            if !delimiter.is_empty() {
+                text_vec = line
+                    .as_str()
+                    .split(&delimiter)
+                    .map(|e| e.to_string())
+                    .collect();
+            } else {
+                text_vec = line.chars().map(|e| e.to_string()).collect();
+            }
+
+            get_fields(text_vec, &fields, &join_string)
         }
-
-        get_fields(
-            text_vec,
-            arguments.fields.unwrap().as_str().split(",").collect(),
-            arguments.join_string.unwrap_or(String::new()),
-        )
     }
 }

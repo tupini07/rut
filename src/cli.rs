@@ -53,7 +53,7 @@ fn check_arguments(args: &AppOptions) {
         }
 
         // now check that the fields are well formatted
-        let r = regex::Regex::new(r"^(\d?\-\d?,?)+$").unwrap();
+        let r = regex::Regex::new(r"^(\d?(\-\d?)?,?)+$").unwrap();
         if !r.is_match(args.fields.clone().unwrap().as_str()) {
             println!(
                 "The provided field value is not formatted correctly \
