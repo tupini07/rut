@@ -1,10 +1,30 @@
 # rut
 
-The _cut_ clone with regex capabilities.
+The _cut_ clone with regex capabilities. This is a work in progress. It is
+currently in a _barely usable_ state.
 
 ## Why not just use `sed` and `cut`?
 
 I like Rust's regex implementation and I've always wanted a `cut` implementation that accepts a multi-character _delimiter_.
+
+## TODOs
+
+- refactor
+    - separate in modules
+    - refactor reusable code
+- documentation
+- examples and explanation in readme
+- better error codes
+- implement debug mode
+- setup deployment CI
+- publish to crates.io
+    - section in readme to install from crates.io
+    - version badge
+
+### New features in another version
+
+- potentially allow to specify color in template?
+- ability to read file instead of only being able to read from stdin
 
 ## Installing
 
