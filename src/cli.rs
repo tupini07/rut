@@ -1,10 +1,11 @@
 use clap::crate_version;
 use clap::Clap;
 use std::process;
+use clap::AppSettings::ColoredHelp;
 
 /// The cut clone with regex capabilities.
 #[derive(Clap)]
-#[clap(version = crate_version!())]
+#[clap(version = crate_version!(), setting = ColoredHelp)]
 pub struct AppOptions {
     /// Regex expression which specifies capture groups
     #[clap(short, long)]

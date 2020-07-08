@@ -59,3 +59,8 @@ cat Cargo.toml | grep = | rut -r "(.?*) = (.?*)" -t "key: '{{1}}' - value: '{{2}
 ```bash
 cat Cargo.toml | grep = | rut -f "1-2,1" -d " -- " -j">>"
 ```
+### If no delimiter is provided then `fields` will act on the individual characters
+
+```bash
+cat Cargo.toml | grep = | rut -f "-5"
+```
