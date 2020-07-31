@@ -1,7 +1,6 @@
 # rut
 
-![CI_build_and_release](https://github.com/tupini07/rut/workflows/CI_build_and_release/badge.svg?branch=master)
-
+![Build and test](https://github.com/tupini07/rut/workflows/Build%20and%20test/badge.svg)
 
 The _cut_ clone with regex capabilities. This is a work in progress. It is
 currently in a _barely usable_ state.
