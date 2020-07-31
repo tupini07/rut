@@ -1,6 +1,6 @@
 [package]
 name = "rut"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Andrea Tupini <tupini07@gmail.com>"]
 description = "The cut clone with regex capabilities"
 edition = "2018"
