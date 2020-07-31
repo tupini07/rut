@@ -1,4 +1,4 @@
-name: CI_build_and_release
+name: Build and Release
 
 env:
   PROJECT_NAME: rut
