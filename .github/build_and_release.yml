@@ -1,0 +1,55 @@
+name: CI_build_and_release
+
+env:
+  PROJECT_NAME: rut
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build_and_release:
+    name: Build
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          # { os, target, cargo-options, features, use-cross, toolchain }
+          - { os: ubuntu-latest  , target: arm-unknown-linux-gnueabihf , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: aarch64-unknown-linux-gnu   , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: i586-unknown-linux-gnu      , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: i686-unknown-linux-gnu      , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: x86_64-unknown-linux-gnu    , use-cross: use-cross }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: rust toolchain ~ install
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          target: ${{ matrix.job.target }}
+          override: true
+          profile: minimal # minimal component installation (ie, no documentation)
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --all-features --target=${{ matrix.job.target }} ${{ matrix.job.cargo-options }}
+      - name: Package
+        shell: bash
+        run: |
+          # binary
+          mkdir -p _pkg
+          cp 'target/${{ matrix.job.target }}/release/${{ env.PROJECT_NAME }}' '_pkg/${{env.PROJECT_NAME}}-${{ matrix.job.target }}'
+          pushd '_pkg/' >/dev/null
+          tar czf '${{env.PROJECT_NAME}}-${{ matrix.job.target }}.tar.gz' '${{env.PROJECT_NAME}}-${{ matrix.job.target }}'
+          popd >/dev/null
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: _pkg/${{env.PROJECT_NAME}}-${{ matrix.job.target }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEP_GITHUB_TOKEN }}

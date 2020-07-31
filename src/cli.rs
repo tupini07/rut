@@ -5,7 +5,9 @@ use std::process;
 
 /// The cut clone with regex capabilities.
 #[derive(Clap)]
-#[clap(version = crate_version!(), setting = ColoredHelp, setting = ArgRequiredElseHelp)]
+#[clap(version = crate_version!(), 
+       setting = ColoredHelp, 
+       setting = ArgRequiredElseHelp)]
 pub struct AppOptions {
     /// Regex expression which specifies capture groups
     #[clap(short, long)]

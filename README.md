@@ -1,5 +1,8 @@
 # rut
 
+![CI_build_and_release](https://github.com/tupini07/rut/workflows/CI_build_and_release/badge.svg?branch=master)
+
+
 The _cut_ clone with regex capabilities. This is a work in progress. It is
 currently in a _barely usable_ state.
 
@@ -12,10 +15,11 @@ I like Rust's regex implementation and I've always wanted a `cut` implementation
 - refactor
     - separate in modules
     - refactor reusable code
-- documentation
 - examples and explanation in readme
-- better error codes
 - implement debug mode
+- documentation
+- better error messages
+- write tests?
 - setup deployment CI
 - publish to crates.io
     - section in readme to install from crates.io
