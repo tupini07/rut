@@ -12,14 +12,12 @@ I like Rust's regex implementation and I've always wanted a `cut` implementation
 ## TODOs
 
 - refactor
-    - separate in modules
     - refactor reusable code
 - examples and explanation in readme
 - implement debug mode
 - documentation
 - better error messages
 - write tests?
-- setup deployment CI
 - publish to crates.io
     - section in readme to install from crates.io
     - version badge
