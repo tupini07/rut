@@ -24,8 +24,10 @@ I like Rust's regex implementation and I've always wanted a `cut` implementation
 
 ### New features in another version
 
-- potentially allow to specify color in template?
 - ability to read file instead of only being able to read from stdin
+- Ability to optionally "grep" incoming lines directly within rut
+    - ex: `cat Cargo.toml | rut --grep " = " -r "(.?*) = (.?*)" -t "key: '{{1}}' - value: '{{2}}'"` 
+- potentially allow to specify color of output in template?
 
 ## Installing
 
