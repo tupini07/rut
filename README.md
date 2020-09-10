@@ -21,6 +21,8 @@ I like Rust's regex implementation and I've always wanted a `cut` implementation
 - publish to crates.io
     - section in readme to install from crates.io
     - version badge
+- Fix issue when using `delimiter` and choosing a `field` which is out of bounds
+    - There can also be the case were the delimiter and field are valid for a certain line, but not for others (eg, `env | grep -i display | rut -d"DISPLAY=" -f 2`)
 
 ### New features in another version
 
