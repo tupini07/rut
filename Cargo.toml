@@ -12,7 +12,7 @@ documentation = "https://github.com/tupini07/rut"
 categories = ["command-line-utilities"]
 
 [dependencies]
-regex = "1.3.9"
+regex = "1.4.0"
 itertools = "0.9.0"
 
 [dependencies.clap]
