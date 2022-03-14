@@ -23,7 +23,7 @@ cargo install --path .
 
 ### Named capture groups
 
-Use the [regex crate's named capture group](https://docs.rs/regex/1.3.9/regex/#example-replacement-with-named-capture-groups) syntax: `(?P<group name>group regex)`.
+Use the [regex crate's named capture group](https://docs.rs/regex/1.5.5/regex/index.html#example-replacement-with-named-capture-groups) syntax: `(?P<group name>group regex)`.
 
 ```bash
 cat Cargo.toml | grep = | rut -r "(?P<key>.?*) = (?P<value>.?*)" -t "key: '{{key}}' - value: '{{value}}'"
