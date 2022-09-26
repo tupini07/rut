@@ -13,7 +13,7 @@ categories = ["command-line-utilities"]
 
 [dependencies]
 regex = "1.5.5"
-itertools = "0.10.3"
+itertools = "0.10.5"
 
 [dependencies.clap]
 features = ["suggestions", "color", "wrap_help"]
