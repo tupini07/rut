@@ -17,7 +17,7 @@ itertools = "0.10.3"
 
 [dependencies.clap]
 features = ["suggestions", "color", "wrap_help"]
-version = "3.0.0-beta.4"
+version = "4.1.4"
 
 [profile.release]
 lto = true
